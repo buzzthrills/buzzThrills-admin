@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logo } from '../assets';
 
-const Footer = () => {
+const Footer:React.FC = () => {
 
 
     const navigate = useNavigate()
@@ -24,7 +24,7 @@ const Footer = () => {
                     <ul className='flex flex-col gap-1 text-gray-400'>
                         <li>Home</li>
                         <li>About us</li>
-                        <li>Delivery</li>
+                        <li>Bookings</li>
                         <li>Privacy Policy</li>
                     </ul>
                 </div>

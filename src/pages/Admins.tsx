@@ -29,32 +29,39 @@ const Admins: React.FC = () => {
   const [editRoleModal, setEditRoleModal] = useState(false);
 
   // ✅ Fetch all admins
+  // ✅ Example: fetchAdmins with new apiRequest
   const fetchAdmins = async () => {
     try {
       setLoading(true);
-      const data = await apiRequest("/admin_admin/all", "POST");
-      const mappedAdmins: Admin[] = data.admins.map((admin: any) => ({
-        id: admin._id,
-        name: admin.name,
-        email: admin.email,
-        dateJoined: new Date(admin.createdAt).toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        }),
-        role: admin.role,
-        displayRole: admin.role === "master" ? "Master Admin" : "Standard Admin",
-        status: admin.is_block ? "Inactive" : "Active",
-      }));
-      setAdmins(mappedAdmins);
-      setFilteredAdmins(mappedAdmins);
+      const { success, data } = await apiRequest("/admin_admin/all", { method: "POST" });
+
+      if (success && data?.admins) {
+        const mappedAdmins: Admin[] = data.admins.map((admin: any) => ({
+          id: admin._id,
+          name: admin.name,
+          email: admin.email,
+          dateJoined: new Date(admin.createdAt).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          }),
+          role: admin.role,
+          displayRole: admin.role === "master" ? "Master Admin" : "Standard Admin",
+          status: admin.is_block ? "Inactive" : "Active",
+        }));
+        setAdmins(mappedAdmins);
+        setFilteredAdmins(mappedAdmins);
+      } else {
+        toast.error("Failed to fetch admins");
+      }
     } catch (err) {
-      console.error("Error fetching admins:", err);
+      console.error(err);
       toast.error("Failed to load admins");
     } finally {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     fetchAdmins();
@@ -88,12 +95,10 @@ const Admins: React.FC = () => {
   const handleDeactivateAdmin = async (adminId: string) => {
     try {
       setLoading(true);
-      const res = await apiRequest(`/admin_admin/deactivate`, "PUT", { id: adminId });
-      if (res.success) {
+      const { success } = await apiRequest(`/admin_admin/deactivate`, { method: "PUT", body: { id: adminId } });
+      if (success) {
         toast.success("Admin deactivated successfully");
         fetchAdmins();
-      } else {
-        toast.error("Failed to deactivate admin");
       }
     } catch (err) {
       console.error(err);
@@ -103,16 +108,13 @@ const Admins: React.FC = () => {
     }
   };
 
-  // ✅ Activate admin
   const handleActivateAdmin = async (adminId: string) => {
     try {
       setLoading(true);
-      const res = await apiRequest(`/admin_admin/activate`, "PUT", { id: adminId });
-      if (res.success) {
+      const { success } = await apiRequest(`/admin_admin/activate`, { method: "PUT", body: { id: adminId } });
+      if (success) {
         toast.success("Admin activated successfully");
         fetchAdmins();
-      } else {
-        toast.error("Failed to activate admin");
       }
     } catch (err) {
       console.error(err);
@@ -121,6 +123,7 @@ const Admins: React.FC = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="p-6 bg-white h-full space-y-6 slim-scrollbar w-full">

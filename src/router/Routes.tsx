@@ -6,6 +6,7 @@ import Admins from "../pages/Admins";
 import Home from "../components/Home";
 import Dashboard from "../pages/Dashboard";
 import News from "../pages/News";
+import Requests from "../pages/Requests";
 
 
 const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
             {
                 path: 'admin',
                 element: <Admins />
+            },
+            {
+                path: 'calls',
+                element: <Requests />
             },
             {
                 path: 'newsletter',

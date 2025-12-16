@@ -6,7 +6,6 @@ const News: React.FC = () => {
     const [subject, setSubject] = useState("");
     const [message, setMessage] = useState("");
      const [imageFile, setImageFile] = useState<File | null>(null);
-    const [imageUrl, setImageUrl] = useState(""); 
     const [loading, setLoading] = useState(false);
 
     const uploadImage = async () => {
@@ -16,7 +15,7 @@ const News: React.FC = () => {
         formData.append("image", imageFile);
 
         try {
-            const res = await fetch("http://localhost:3000/upload", {
+            const res = await fetch("https://buzzthrillz-backend.onrender.com/upload", {
                 method: "POST",
                 body: formData,
             });
@@ -62,7 +61,6 @@ const News: React.FC = () => {
             setSubject("");
             setMessage("");
             setImageFile(null);
-            setImageUrl("");
         } else {
             toast.error(data?.error || "Failed to send newsletter.");
         }

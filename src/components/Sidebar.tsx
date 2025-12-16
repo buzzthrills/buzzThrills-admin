@@ -7,7 +7,7 @@ import { side_menu } from '../data/SideMenu';
 import ModalWrapper from './modalParent';
 import Logout from './Logout';
 
-const Sidebar:React.FC = () => {
+const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openLogOut, setOpenLogOut] = useState(false);
 
@@ -39,18 +39,25 @@ const Sidebar:React.FC = () => {
               }}
               className="group flex hover:bg-[#1AA80326] w-full p-4 text-black items-center gap-2 transition-all duration-300"
             >
-              <div className="relative w-6 h-6">
-                <img
-                  src={link.icon}
-                  alt={link.label}
-                  className="absolute top-1 inset-0 w-4 h-4 transition-opacity duration-300 opacity-100 group-hover:opacity-0"
-                />
-                <img
-                  src={link.icon}
-                  alt={`${link.label} hover`}
-                  className="absolute top-1 inset-0 w-5 h-5 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-                />
+              <div className="relative w-6 h-6 flex items-center justify-center">
+                {typeof link.icon === "string" ? (
+                  <>
+                    <img
+                      src={link.icon}
+                      alt={link.label}
+                      className="absolute top-1 inset-0 w-4 h-4 transition-opacity duration-300 opacity-100 group-hover:opacity-0"
+                    />
+                    <img
+                      src={link.icon}
+                      alt={`${link.label} hover`}
+                      className="absolute top-1 inset-0 w-5 h-5 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                    />
+                  </>
+                ) : (
+                  <link.icon size={16}   className="-ml-2 text-black/40" /> // Render the React Icon
+                )}
               </div>
+
               <span className="font-extralight capitalize">{link.label}</span>
             </Link>
           </motion.div>

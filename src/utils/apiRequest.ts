@@ -2,6 +2,7 @@
 import { toast } from "react-hot-toast";
 
 const API_URL = "http://localhost:3000";
+// const API_URL = "https://buzzthrillz-backend.onrender.com";
 
 type ApiOptions = {
   method?: string;
@@ -14,6 +15,8 @@ type ApiResponse<T = any> = {
   success: boolean;
   data: T | null;
 };
+
+
 
 export const apiRequest = async <T = any>(
   endpoint: string,
@@ -28,9 +31,7 @@ export const apiRequest = async <T = any>(
       "Content-Type": "application/json",
     };
 
-    if (authToken) {
-      headers.Authorization = `Bearer ${authToken}`;
-    }
+    if (authToken) headers.Authorization = `Bearer ${authToken}`;
 
     const response = await fetch(`${API_URL}${endpoint}`, {
       method,
@@ -38,23 +39,30 @@ export const apiRequest = async <T = any>(
       ...(body && { body: JSON.stringify(body) }),
     });
 
-    const data = await response.json();
-    toast.dismiss(toastId);
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      data = null; // fallback if response is empty or invalid JSON
+    }
+
+    toast.dismiss(toastId); // dismiss loading once
 
     if (!response.ok) {
-      toast.error(data.msg || "Something went wrong!");
+      toast.error(data?.msg || data?.message || "Something went wrong!");
       return { success: false, data };
     }
 
-    if (showSuccess && (data.msg || data.message)) {
+    if (showSuccess && (data?.msg || data?.message)) {
       toast.success(data.msg || data.message);
     }
 
     return { success: true, data };
   } catch (error) {
-    toast.dismiss(toastId);
+    toast.dismiss(toastId); // dismiss loading once
     toast.error("Network error! Please try again.");
     console.error("API Error:", error);
     return { success: false, data: null };
   }
 };
+
