@@ -113,20 +113,19 @@ const Dashboard: React.FC = () => {
             <tbody>
               {bookings.map((booking) => (
                 <tr key={booking._id} className="border-b border-gray-300 last:border-none">
-                  <td className="py-4">{booking.user.fullName}</td>
-                  <td className="py-3">{booking.recipient.name}</td>
-                  <td className="py-3">{booking.recipient.phone}</td>
-                  <td className="py-3">{booking.recipient.callType}</td>
+                  <td className="py-4 min-w-54">{booking.user?.email || "N/A"}</td>
+                  <td className="py-3">{booking.recipient?.name}</td>
+                  <td className="py-3">{booking.recipient?.phone}</td>
+                  <td className="py-3">{booking.recipient?.callType}</td>
                   <td className="py-3">
                     {new Date(booking.recipient.date).toLocaleDateString()}
                   </td>
                   <td className="py-3">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        booking.status.toLowerCase() === "completed"
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${booking.status.toLowerCase() === "completed"
                           ? "bg-green-100 text-green-600"
                           : "bg-yellow-100 text-yellow-600"
-                      }`}
+                        }`}
                     >
                       {booking.status}
                     </span>
@@ -138,7 +137,7 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-     
+
     </div>
   );
 };
